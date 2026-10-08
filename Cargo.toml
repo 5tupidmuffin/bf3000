@@ -1,0 +1,9 @@
+[package]
+name = "bf3000"
+description = "a brainfuck transpiler"
+version = "0.1.0"
+edition = "2024"
+authors = ["5tupidmuffin"]
+license = "BSD-2-Clause"
+
+[dependencies]
