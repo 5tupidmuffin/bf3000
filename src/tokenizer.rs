@@ -56,8 +56,6 @@ pub fn tokenize(src: &str) -> Vec<BFToken> {
         idx += 1;
     }
     if !bracket_stack.is_empty() {
-        println!("brakcet stack : {:?}", bracket_stack);
-        println!("herer");
         panic!("invalid brackets");
     }
     tokens
