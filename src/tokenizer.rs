@@ -143,4 +143,28 @@ mod tests {
             assert_eq!(tokenize(input), expected);
         }
     }
+
+    #[test]
+    #[should_panic]
+    fn invalid_brackets_1() {
+        tokenize("[");
+    }
+
+    #[test]
+    #[should_panic]
+    fn invalid_brackets_2() {
+        tokenize("[[]");
+    }
+
+    #[test]
+    #[should_panic]
+    fn invalid_brackets_3() {
+        tokenize("[[][");
+    }
+
+    #[test]
+    #[should_panic]
+    fn invalid_brackets_4() {
+        tokenize("]");
+    }
 }
