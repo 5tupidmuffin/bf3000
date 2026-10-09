@@ -27,15 +27,25 @@ fn tokenize_repeating_operators(src_chars: &Vec<char>, mut idx: usize) -> (BFTok
 pub fn tokenize(src: &str) -> Vec<BFToken> {
     let mut tokens = vec![];
     let mut idx = 0;
+    let mut bracket_stack = vec![];
     let src_chars: Vec<_> = src.chars().collect();
 
     while idx < src_chars.len() {
-        let char = src_chars[idx];
-        match char {
+        match src_chars[idx] {
             '.' => tokens.push(BFToken::Print),
             ',' => tokens.push(BFToken::Read),
-            '[' => tokens.push(BFToken::BracketOpen),
-            ']' => tokens.push(BFToken::BracketClose),
+            '[' => {
+                bracket_stack.push(1);
+                tokens.push(BFToken::BracketOpen);
+            }
+            ']' => {
+                if bracket_stack.is_empty() {
+                    panic!("invalid brackets");
+                }
+                bracket_stack.pop();
+                println!("popped");
+                tokens.push(BFToken::BracketClose);
+            }
             '+' | '-' | '>' | '<' => {
                 let (token, new_idx) = tokenize_repeating_operators(&src_chars, idx);
                 tokens.push(token);
@@ -45,8 +55,11 @@ pub fn tokenize(src: &str) -> Vec<BFToken> {
         }
         idx += 1;
     }
-
-    // TODO: add bracket validation
+    if !bracket_stack.is_empty() {
+        println!("brakcet stack : {:?}", bracket_stack);
+        println!("herer");
+        panic!("invalid brackets");
+    }
     tokens
 }
 
@@ -63,8 +76,7 @@ mod tests {
             ("<", vec![BFToken::Shift(-1)]),
             (".", vec![BFToken::Print]),
             (",", vec![BFToken::Read]),
-            ("[", vec![BFToken::BracketOpen]),
-            ("]", vec![BFToken::BracketClose]),
+            ("[]", vec![BFToken::BracketOpen, BFToken::BracketClose]),
         ];
 
         for (input, expected) in tests {
@@ -93,6 +105,38 @@ mod tests {
             ("[>>>+++]", vec![BFToken::BracketOpen, BFToken::Shift(3), BFToken::Arithmetic(3), BFToken::BracketClose]),
             ("[]", vec![BFToken::BracketOpen, BFToken::BracketClose]),
             ("[+]", vec![BFToken::BracketOpen, BFToken::Arithmetic(1), BFToken::BracketClose])
+        ];
+
+        for (input, expected) in tests {
+            assert_eq!(tokenize(input), expected);
+        }
+    }
+
+    #[test]
+    fn valid_brackets() {
+        let tests = vec![
+            (
+                "[[[]]]",
+                vec![
+                    BFToken::BracketOpen,
+                    BFToken::BracketOpen,
+                    BFToken::BracketOpen,
+                    BFToken::BracketClose,
+                    BFToken::BracketClose,
+                    BFToken::BracketClose,
+                ],
+            ),
+            (
+                "[][][]",
+                vec![
+                    BFToken::BracketOpen,
+                    BFToken::BracketClose,
+                    BFToken::BracketOpen,
+                    BFToken::BracketClose,
+                    BFToken::BracketOpen,
+                    BFToken::BracketClose,
+                ],
+            ),
         ];
 
         for (input, expected) in tests {
