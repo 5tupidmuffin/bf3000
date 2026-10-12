@@ -1,4 +1,7 @@
 #[derive(Debug, PartialEq)]
+
+// TODO: implement optimizer
+
 pub enum BFToken {
     Arithmetic(i32),
     Shift(i32),
@@ -43,7 +46,6 @@ pub fn tokenize(src: &str) -> Vec<BFToken> {
                     panic!("invalid brackets");
                 }
                 bracket_stack.pop();
-                println!("popped");
                 tokens.push(BFToken::BracketClose);
             }
             '+' | '-' | '>' | '<' => {
@@ -51,7 +53,7 @@ pub fn tokenize(src: &str) -> Vec<BFToken> {
                 tokens.push(token);
                 idx = new_idx;
             }
-            _ => continue,
+            _ => {}
         }
         idx += 1;
     }
