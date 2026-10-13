@@ -3,6 +3,7 @@ use std::{
     fs::{self, File},
     io::Write,
     path::Path,
+    process::Command,
 };
 
 use bf3000::{tokenizer::tokenize, transpiler::transpile_to_c};
@@ -21,8 +22,9 @@ fn main() {
 
     let tokens = tokenize(&bf_src);
     let c_code = transpile_to_c(tokens);
+    let c_file_path = bf_script_path.with_extension("c");
 
-    let Ok(mut c_file) = File::create(bf_script_path.with_extension("c")) else {
+    let Ok(mut c_file) = File::create(&c_file_path) else {
         panic!("failed to create c source code file");
     };
 
@@ -30,5 +32,18 @@ fn main() {
         panic!("failed to write c_code to file with error = {}", err);
     }
 
-    // TODO: implement compilation process call based on CC env
+    let Ok(c_compiler) = env::var("CC") else {
+        return;
+    };
+
+    let is_compiled = Command::new(c_compiler)
+        .arg("-o")
+        .arg(&c_file_path.with_extension(""))
+        .arg(&c_file_path)
+        .status()
+        .expect("failed to compile c code");
+
+    if !is_compiled.success() {
+        panic!("failed to compile c code");
+    }
 }
