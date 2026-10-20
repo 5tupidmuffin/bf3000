@@ -1,8 +1,11 @@
 ### bf3000 - a brainfuck transpiler
-#### Usage
+#### usage
 ```shell
 bf3000 [bf_script]
-# or
+# or, to get compiled binary
 CC=gcc|clang bf3000 [bf_script]
 ```
-if a C Compiler path is set via CC path variable, the program will try to compile the generated c code with it.
+if a C Compiler path is set via CC path variable, bf3000 will try to compile the generated c code with it.
+
+#### references
+- optimization referenced from http://calmerthanyouare.org/2015/01/07/optimizing-brainfuck.html.
