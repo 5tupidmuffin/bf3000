@@ -6,7 +6,7 @@ use std::{
     process::Command,
 };
 
-use bf3000::{tokenizer::tokenize, transpiler::transpile_to_c};
+use bf3000::{optimize_tokens, tokenize, transpile_to_c};
 
 fn main() {
     let args: Vec<_> = env::args().skip(1).collect();
@@ -20,7 +20,7 @@ fn main() {
         panic!("failed to read file: {}", args[0]);
     };
 
-    let tokens = tokenize(&bf_src);
+    let tokens = optimize_tokens(&tokenize(&bf_src));
     let c_code = transpile_to_c(tokens);
     let c_file_path = bf_script_path.with_extension("c");
 

@@ -59,6 +59,11 @@ pub fn transpile_to_c(bf_tokens: Vec<BFToken>) -> String {
                 indent -= 1;
                 c_src.push_str(&format!("{}}}\n\n", "    ".repeat(indent)));
             }
+
+            // optimization tokens
+            BFToken::ClearLoop => {
+                c_src.push_str(&format!("{}memory[cursor] = 0;\n", "    ".repeat(indent)));
+            }
         }
     }
     c_src.push_str("    return 0;\n}\n"); // closing main

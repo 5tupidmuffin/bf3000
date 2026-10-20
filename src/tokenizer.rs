@@ -1,7 +1,6 @@
 #[derive(Debug, PartialEq)]
-
 // TODO: implement optimizer
-
+#[derive(Clone, Copy)]
 pub enum BFToken {
     Arithmetic(i32),
     Shift(i32),
@@ -9,6 +8,8 @@ pub enum BFToken {
     BracketClose,
     Print,
     Read,
+    // optmization tokens, not part of actual specification
+    ClearLoop,
 }
 
 fn tokenize_repeating_operators(src_chars: &Vec<char>, mut idx: usize) -> (BFToken, usize) {
