@@ -64,6 +64,14 @@ pub fn transpile_to_c(bf_tokens: Vec<BFToken>) -> String {
             BFToken::ClearLoop => {
                 c_src.push_str(&format!("{}memory[cursor] = 0;\n", "    ".repeat(indent)));
             }
+            BFToken::Multiply(offset, factor) => {
+                c_src.push_str(&format!(
+                    "{}memory[cursor + {}] += memory[cursor] * {};\n",
+                    "    ".repeat(indent),
+                    offset,
+                    factor,
+                ));
+            }
         }
     }
     c_src.push_str("    return 0;\n}\n"); // closing main

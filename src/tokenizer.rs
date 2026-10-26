@@ -10,6 +10,7 @@ pub enum BFToken {
     Read,
     // optmization tokens, not part of actual specification
     ClearLoop,
+    Multiply(i32, i32),
 }
 
 fn tokenize_repeating_operators(src_chars: &Vec<char>, mut idx: usize) -> (BFToken, usize) {
