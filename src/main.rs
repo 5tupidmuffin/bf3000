@@ -36,10 +36,13 @@ fn main() {
         return;
     };
 
+    let compiler_flags = env::var("CFLAGS").unwrap_or_else(|_| "".to_string());
+
     let is_compiled = Command::new(c_compiler)
+        .arg(compiler_flags)
+        .arg(&c_file_path)
         .arg("-o")
         .arg(&c_file_path.with_extension(""))
-        .arg(&c_file_path)
         .status()
         .expect("failed to compile c code");
 
