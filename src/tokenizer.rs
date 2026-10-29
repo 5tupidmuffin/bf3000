@@ -33,7 +33,7 @@ pub fn tokenize(src: &str) -> Vec<BFToken> {
     let mut tokens = vec![];
     let mut idx = 0;
     let mut bracket_stack = vec![];
-    let src_chars: Vec<_> = src.replace("\n", "").chars().collect();
+    let src_chars: Vec<_> = src.chars().filter(|x| "[]<>.,-+".contains(*x)).collect();
 
     while idx < src_chars.len() {
         match src_chars[idx] {
