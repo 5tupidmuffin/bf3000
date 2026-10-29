@@ -9,3 +9,5 @@ if a C Compiler path is set via CC path variable, bf3000 will try to compile the
 
 #### references
 - optimization referenced from http://calmerthanyouare.org/2015/01/07/optimizing-brainfuck.html.
+
+checkout the brainfuck interpreter in go - [brfk](https://github.com/5tupidmuffin/brfk)
