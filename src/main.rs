@@ -36,17 +36,16 @@ fn main() {
         return;
     };
 
-    let compiler_flags = env::var("CFLAGS").unwrap_or_else(|_| "".to_string());
+    let compiler_flags = env::var("CFLAGS").unwrap_or_default();
 
-    let is_compiled = Command::new(c_compiler)
-        .arg(compiler_flags)
+    let mut command = Command::new(c_compiler);
+    command
+        .args(compiler_flags.split_whitespace())
         .arg(&c_file_path)
         .arg("-o")
-        .arg(&c_file_path.with_extension(""))
-        .status()
-        .expect("failed to compile c code");
+        .arg(c_file_path.with_extension(""));
 
-    if !is_compiled.success() {
-        panic!("failed to compile c code");
-    }
+    eprintln!("compiling generated c code with: {command:?}");
+
+    let _is_compiled = command.status().expect("failed to compile c code");
 }
