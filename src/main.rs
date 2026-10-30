@@ -45,7 +45,7 @@ fn main() {
         .arg("-o")
         .arg(c_file_path.with_extension(""));
 
-    eprintln!("compiling generated c code with: {command:?}");
+    println!("compiling generated c code with: {command:?}");
 
     let _is_compiled = command.status().expect("failed to compile c code");
 }
